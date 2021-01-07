@@ -16,13 +16,13 @@ optional arguments:
                         experiment id: amip-piForcing
   -o OUTPUT_DIR, --output_dir OUTPUT_DIR
                         output directory, default to current directory
-  -c {5,6}, --cimp_version {5,6}
-                        CIMP version: 5 or 6
+  -c {5,6}, --cmip_version {5,6}
+                        CMIP version: 5 or 6
   -n NUM_WORKERS, --num_workers NUM_WORKERS
                         number of workers to download in parallel
 ```
 
 Example
 ```
-python3 cmip_downloader.py -v tas -f mon -e amip-piForcing -o /data/cimp6
+python3 cmip_downloader.py -v tas -f mon -e amip-piForcing -o /data/cmip6
 ```
