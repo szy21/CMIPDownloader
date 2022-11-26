@@ -47,14 +47,14 @@ if __name__ == '__main__':
     parser.add_argument("-e", "--experiment", required=True, help="experiment id: amip-piForcing", type=str)
     parser.add_argument("-o", "--output_dir", default="./", help="output directory, default to current directory",
                         type=str)
-    parser.add_argument("-c", "--cimp_version", default=6, type=int, choices=[5, 6], help="CIMP version: 5 or 6")
+    parser.add_argument("-c", "--cmip_version", default=6, type=int, choices=[5, 6], help="CIMP version: 5 or 6")
     parser.add_argument("-n", "--num_workers", default=4, type=int, help="number of workers to download in parallel")
 
     args = parser.parse_args()
     variable_name = args.variable
     frequency_value = args.frequency
     experiment_id = args.experiment
-    cimp_version = args.cimp_version
+    cmip_version = args.cmip_version
     number_of_processes = args.num_workers
 
     if not os.path.exists(args.output_dir):
@@ -63,38 +63,38 @@ if __name__ == '__main__':
 
     variable = ''
     if variable_name:
-        if args.cimp_version == 6:
+        if args.cmip_version == 6:
             variable = '&variable_id=' + variable_name
-        elif args.cimp_version == 5:
+        elif args.cmip_version == 5:
             variable = '&variable=' + variable_name
     else:
         variable_name = 'all'
 
     frequency = ''
     if frequency_value:
-        if args.cimp_version == 6:
+        if args.cmip_version == 6:
             frequency = '&frequency=' + frequency_value
-        elif args.cimp_version == 5:
+        elif args.cmip_version == 5:
             frequency = '&time_frequency=' + frequency_value
     else:
         frequency_value = 'all'
 
     experiment = ''
     if experiment_id:
-        if args.cimp_version == 6:
+        if args.cmip_version == 6:
             experiment = '&experiment_id=' + experiment_id
-        elif args.cimp_version == 5:
+        elif args.cmip_version == 5:
             experiment = '&experiment=' + experiment_id
     else:
         experiment_id = 'all'
 
-    if args.cimp_version == 6:
+    if args.cmip_version == 6:
         facets = '&facets=mip_era%2Cactivity_id%2Cmodel_cohort%2Cproduct%2Csource_id%2Cinstitution_id%2Csource_type%2Cnominal_resolution%2Cexperiment_id%2Csub_experiment_id%2Cvariant_label%2Cgrid_label%2Ctable_id%2Cfrequency%2Crealm%2Cvariable_id%2Ccf_standard_name%2Cdata_node&format=application%2Fsolr%2Bjson'
-    elif args.cimp_version == 5:
+    elif args.cmip_version == 5:
         facets = '&facets=project%2Cproduct%2Cinstitute%2Cmodel%2Cexperiment%2Cexperiment_family%2Ctime_frequency%2Crealm%2Ccmor_table%2Censemble%2Cvariable%2Cvariable%2Ccf_standard_name%2Cdata_node&format=application%2Fsolr%2Bjson'
 
     url = 'https://esgf-node.llnl.gov/esg-search/search/' + \
-         ('?offset=0&limit=10000&type=Dataset&replica=false&latest=true&project=CMIP%d&' %cimp_version) \
+         ('?offset=0&limit=10000&type=Dataset&replica=false&latest=true&project=CMIP%d&' %cmip_version) \
           + variable + frequency + experiment + facets
 
 
@@ -111,7 +111,7 @@ if __name__ == '__main__':
         pool_search.join()
         # ignore files the end before min_date
         fs = list(files_to_download)
-        if cimp_version == 5:
+        if cmip_version == 5:
             print("Filtering files containing variable name %s from %d files"
                   %(args.variable, len(files_to_download)))
             files_to_download = [x for x in files_to_download if args.variable.lower() in x.lower()]
